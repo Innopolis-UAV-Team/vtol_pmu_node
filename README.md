@@ -12,7 +12,10 @@
 | ---- | ----------- | ------ |
 | <img src="Assets/view.jpg" alt="drawing" width="200"> | <img src="https://github.com/Innopolis-UAV-Team/vtol-pmu-ioc/raw/6530f3319c28916c0268c4aedbf7e330f0dfdd90/Assets/stm32cubemx.png" alt="drawing" width="200"> | pinout |
 
-### 3. Application interface
+### 3. Application description
+
+The PMU node do 3 things:
+1. Measure
 
 [BatteryInfo](https://dronecan.github.io/Specification/7._List_of_standard_data_types/#batteryinfo)
 

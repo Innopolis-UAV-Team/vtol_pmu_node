@@ -1,6 +1,6 @@
 pmu.soc_pct:
   type: Integer
-  note: "Percent of the full charge [-1, 127]: </br> - Value of -1 means auto estimation (doesn't work at the moment), </br> - [0, 100] means constant, </br> - [101, 127] are incorrect values."
+  note: "Percent of the full charge [-1, 127]: </br> - Value of -1 means auto estimation (doesn't work at the moment), </br> - [0, 100] means constant percent, </br> - [101, 127] means constants as well, but the values are incorrect for an autopilot."
   enum: PARAM_PMU_SOC_PCT
   flags: mutable
   default: -1

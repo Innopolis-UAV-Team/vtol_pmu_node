@@ -9,7 +9,7 @@ uavcan.node.id:
 
 system.name:
   type: String
-  note: Defines custom node name. If empty, the node will use the default name.
+  note: Defines custom node name. If empty, the node will use 'arl.pmu' name.
   enum: PARAM_SYSTEM_NAME
   flags: mutable
   default: "arl.pmu"

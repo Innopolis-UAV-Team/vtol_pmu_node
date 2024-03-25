@@ -11,6 +11,7 @@ extern "C" {
 #include <stdint.h>
 
 class Buzzer {
+public:
     Buzzer();
     int8_t init();
     void set_params(uint32_t frequency, uint32_t duration);
