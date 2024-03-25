@@ -12,7 +12,7 @@ The node has the following registers:
 |  8 | buzzer.arm_melody       | Melody that is played when the vehicle is armed. Not implemented at the momement. |
 |  9 | buzzer.frequency        | This parameter is applied only if buzzer.melody=127. It means PWM Frequency, Hz. |
 |  10 | buzzer.duration         | This parameter is applied only if buzzer.melody=127. It means PWM duration, us. |
-|  11 | gate.threshold          | If gate ADC less than this paramter, so it is broken.</br>If the node detects a broken gate once, it publishes LogMessage every 10 seconds until reboot.</br>The node ignore. |
+|  11 | gate.threshold          | If gate ADC less than this parameter, so it is broken.</br>If the node detects a broken gate once, it publishes LogMessage every 10 seconds until reboot.</br>The node ignore. |
 
 > This docs was automatically generated. Do not edit it manually.
 
