@@ -17,7 +17,7 @@ set(applicationSourceCode
     ${libparamsSrc}
     ${DRONECAN_SOURCES}
     ${APPLICATION_DIR}/application.cpp
-    ${APPLICATION_DIR}/modules/pmu/pmu.cpp
+    ${APPLICATION_DIR}/modules/battery/battery.cpp
     ${APPLICATION_DIR}/modules/buzzer/buzzer.cpp
     ${APPLICATION_DIR}/modules/gate_monitor/gate_monitor.cpp
 )
@@ -30,7 +30,7 @@ set(applicationHeaders
 
 set(LIBPARAMS_PARAMS
     ${APPLICATION_DIR}/params.yaml
-    ${APPLICATION_DIR}/modules/pmu/params.yaml
+    ${APPLICATION_DIR}/modules/battery/params.yaml
     ${APPLICATION_DIR}/modules/buzzer/params.yaml
     ${APPLICATION_DIR}/modules/gate_monitor/params.yaml
 )

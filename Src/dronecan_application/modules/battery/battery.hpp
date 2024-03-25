@@ -1,8 +1,8 @@
 // Copyright (C) 2023 Dmitry Ponomarev <ponomarevda96@gmail.com>
 // Distributed under the terms of the GPL v3 license, available in the file LICENSE.
 
-#ifndef SRC_MODULES_PMU_HPP_
-#define SRC_MODULES_PMU_HPP_
+#ifndef SRC_MODULES_BATTERY_HPP_
+#define SRC_MODULES_BATTERY_HPP_
 
 #include <stdint.h>
 #include "uavcan/equipment/power/BatteryInfo.h"
@@ -12,9 +12,9 @@ extern "C" {
 #endif
 
 
-class VtolPmu {
+class VtolBattery {
 public:
-    VtolPmu();
+    VtolBattery();
     int8_t init();
     void process();
 private:
@@ -29,4 +29,4 @@ private:
 }
 #endif
 
-#endif  // SRC_MODULES_PMU_HPP_
+#endif  // SRC_MODULES_BATTERY_HPP_

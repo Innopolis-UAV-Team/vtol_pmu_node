@@ -8,7 +8,7 @@
 #include "storage.h"
 #include "periphery/led/led.hpp"
 #include "periphery/adc/adc.hpp"
-#include "modules/pmu/pmu.hpp"
+#include "modules/battery/battery.hpp"
 #include "modules/buzzer/buzzer.hpp"
 #include "modules/gate_monitor/gate_monitor.hpp"
 
@@ -29,12 +29,12 @@ void application_entry_point() {
     uavcanInitApplication(node_id);
     uavcanSetNodeName(isCharacter(node_name[0]) ? node_name : "arl.pmu");
 
-    VtolPmu pmu;
-    pmu.init();
+    VtolBattery battery;
+    battery.init();
 
     while(true) {
         LedPeriphery::toggle();
         uavcanSpinOnce();
-        pmu.process();
+        battery.process();
     }
 }

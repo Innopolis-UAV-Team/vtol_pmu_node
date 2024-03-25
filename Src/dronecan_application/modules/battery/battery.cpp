@@ -1,7 +1,7 @@
 // Copyright (C) 2023 Dmitry Ponomarev <ponomarevda96@gmail.com>
 // Distributed under the terms of the GPL v3 license, available in the file LICENSE.
 
-#include "pmu.hpp"
+#include "battery.hpp"
 #include <math.h>
 #include "dronecan.h"
 #include "main.h"
@@ -13,11 +13,11 @@
 #define ADC_VOLTAGE_MULTIPLIER (19.0 * 3.3 / 4096.0) // 62.7  Volts when ADC is 3.3V (4095)
 #define ADC_CURRENT_MULTIPLIER 0.04884004884         // 200.0 Amper when ADC is 3.3V (4095)
 
-VtolPmu::VtolPmu() {
+VtolBattery::VtolBattery() {
 
 }
 
-int8_t VtolPmu::init() {
+int8_t VtolBattery::init() {
     _battery_info.current = 0.0;
     _battery_info.voltage = 0.0;
     _battery_info.temperature = 0.0;
@@ -45,7 +45,7 @@ int8_t VtolPmu::init() {
     return 0;
 }
 
-void VtolPmu::process() {
+void VtolBattery::process() {
     uint32_t crnt_time_ms = HAL_GetTick();
     if (crnt_time_ms < _last_spin_time_ms + 200) {
         return;
@@ -54,7 +54,7 @@ void VtolPmu::process() {
     _spin_once();
 }
 
-void VtolPmu::_spin_once() {
+void VtolBattery::_spin_once() {
     _last_spin_time_ms = HAL_GetTick();
 
     int8_t pmu_soc_pct = paramsGetIntegerValue(PARAM_PMU_SOC_PCT);
