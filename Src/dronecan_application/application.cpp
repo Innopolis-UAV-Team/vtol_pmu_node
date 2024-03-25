@@ -8,7 +8,8 @@
 #include "storage.h"
 #include "periphery/led/led.hpp"
 #include "periphery/adc/adc.hpp"
-#include "modules/pmu.hpp"
+#include "modules/pmu/pmu.hpp"
+#include "modules/buzzer/buzzer.hpp"
 
 static bool isCharacter(uint8_t byte) {
     return ((byte >= 'a' && byte <= 'z') || (byte >= 'A' && byte <= 'Z'));

@@ -7,15 +7,6 @@ uavcan.node.id:
   min: 0
   max: 255
 
-pmu.soc_pct:
-  type: Integer
-  note: "Percent of the full charge [-1, 127]: </br> - Value of -1 means auto estimation (doesn't work at the moment), </br> - [0, 100] means constant, </br> - [101, 127] are incorrect values."
-  enum: PARAM_PMU_SOC_PCT
-  flags: mutable
-  default: -1
-  min: 0
-  max: 127
-
 system.name:
   type: String
   note: Defines custom node name. If empty, the node will use the default name.

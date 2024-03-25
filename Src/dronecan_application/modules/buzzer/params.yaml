@@ -1,0 +1,17 @@
+buzzer.frequency:
+  type: Integer
+  note: "Frequency, Hz"
+  enum: PARAM_BUZZER_FREQUENCY
+  flags: mutable
+  default: 5
+  min: 0
+  max: 100000
+
+buzzer.duration:
+  type: Integer
+  note: "Duration, us"
+  enum: PARAM_BUZZER_DURATION
+  flags: mutable
+  default: 0
+  min: 0
+  max: 100000
