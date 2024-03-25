@@ -1,8 +1,35 @@
 battery.soc_pct:
   type: Integer
   note: "Percent of the full charge [-1, 127]: </br> - Value of -1 means auto estimation (doesn't work at the moment), </br> - [0, 100] means constant percent, </br> - [101, 127] means constants as well, but the values are incorrect for an autopilot."
-  enum: PARAM_PMU_SOC_PCT
+  enum: PARAM_BATTERY_SOC_PCT
   flags: mutable
   default: -1
   min: 0
   max: 127
+
+battery.id:
+  type: Integer
+  note: Value of battery_id field in BatteryInfo message
+  enum: PARAM_BATTERY_ID
+  flags: mutable
+  default: 0
+  min: 0
+  max: 255
+
+battery.model_instance_id:
+  type: Integer
+  note: Value of model_instance_id field in BatteryInfo message
+  enum: PARAM_BATTERY_MODEL_INSTANCE_ID
+  flags: mutable
+  default: 0
+  min: 0
+  max: 0
+
+battery.capacity_mah:
+  type: Integer
+  note: Full battery capacity, mAh. Default is 20000 mAh. Each cell is 4000 mAh.
+  enum: PARAM_BATTERY_CAPACITY_MAH
+  flags: mutable
+  default: 20000
+  min: 4000
+  max: 80000
