@@ -18,7 +18,11 @@
 
 <img src="Assets/battery_info.png" alt="drawing">
 
-### 4. Notes
+### 4. How to upload a firmware?
+
+<img src="Assets/swd.png" alt="drawing" width="400">
+
+### 5. Notes
 
 **Current ADC**
 
