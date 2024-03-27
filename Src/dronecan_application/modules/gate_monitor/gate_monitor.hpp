@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Dmitry Ponomarev <ponomarevda96@gmail.com>
+// Copyright (C) 2024 Anastasiia Stepanova <asiiapine@gmail.com>
 // Distributed under the terms of the GPL v3 license, available in the file LICENSE.
 
 #ifndef SRC_MODULES_GATE_MONITOR_HPP_
@@ -22,7 +22,9 @@ enum GateStatus : bool {
 class GateMonitor {
 public:
     // static GateMonitor &get_instance();
-    void process();
+    int8_t process();
+
+    static uint8_t number_of_broken_gates;
 
     static GateStatus gate_2_status;
     static GateStatus gate_3_status;
