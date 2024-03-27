@@ -22,3 +22,8 @@ uint32_t PwmPeriphery::get_duration(PwmPin pwm_pin) {
     (void)pwm_pin;
     return 0;
 }
+
+uint32_t PwmPeriphery::get_frequency(PwmPin pwm_pin) {
+    (void)pwm_pin;
+    return 0;
+}

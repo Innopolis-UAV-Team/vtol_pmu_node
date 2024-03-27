@@ -12,20 +12,18 @@ Buzzer::Buzzer() {
 
 int8_t Buzzer::init() {
     pwm_pin = PwmPin::PWM_BUZZER;
+    PwmPeriphery::init(pwm_pin);
     return 0;
 }
 
 void Buzzer::buzzerSet(uint32_t frequency, uint32_t duration) {
-    if (HAL_GetTick() % 100) {
-        static char buffer[90];
-        sprintf(buffer, "%d %d", frequency, duration);
-        logger.log_debug(buffer);
-    } 
-    PwmPeriphery::set_duration(pwm_pin, duration);
     PwmPeriphery::set_frequency(pwm_pin, frequency);
+    PwmPeriphery::set_duration(pwm_pin, duration);
 }
 
 void Buzzer::process(bool error_flag) {
+    static uint32_t next_upd_ms = 0;
+    // PwmPeriphery::set_frequency(pwm_pin, HAL_GetTick() % 1500);
     if (error_flag != 0) {
         switch (error_melody) {
         case 127:
@@ -44,35 +42,27 @@ void Buzzer::process(bool error_flag) {
             break;
         }
     }
+    if (HAL_GetTick() > next_upd_ms) {
+        update_params();
+        next_upd_ms += 200;
+    }
+    if (HAL_GetTick() % 1000 == 0) {
+        static char buffer[90];
+        sprintf(buffer, "%d %d %d %d", PwmPeriphery::get_duration(pwm_pin), PwmPeriphery::get_frequency(pwm_pin), TIM4->ARR, TIM4->CCR2);
+        logger.log_debug(buffer);
+    }
 }
 
 void Buzzer::update_params() {
-    error_melody = paramsGetIntegerValue(IntParamsIndexes::PARAM_BUZZER_ERROR_MELODY);
+    auto new_error_melody = paramsGetIntegerValue(IntParamsIndexes::PARAM_BUZZER_ERROR_MELODY);
     arm_melody = paramsGetIntegerValue(IntParamsIndexes::PARAM_BUZZER_ARM_MELODY);
     buzzer_frequency = paramsGetIntegerValue(IntParamsIndexes::PARAM_BUZZER_FREQUENCY);
     buzzer_duration = paramsGetIntegerValue(IntParamsIndexes::PARAM_BUZZER_DURATION);
+    if (new_error_melody != error_melody){
+        logger.log_debug("Melody updated");
+        error_melody = new_error_melody;
+    }
 }
-
-static uint32_t bummer_volume[BEAP_SIZE] = {
-    1, 1,
-    1, 1,
-    0, 0,
-    1, 1,
-    1, 1,
-    0, 0,
-
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1
-};
 
 static uint32_t bummer_freq[BEAP_SIZE] = {
     987, 987,
@@ -98,7 +88,7 @@ static uint32_t bummer_freq[BEAP_SIZE] = {
 void Buzzer::buzzerBeapBimmer() {
     uint8_t seq = (HAL_GetTick() % 7000) / 200;
     if (seq < BEAP_SIZE) {
-        buzzerSet(bummer_freq[seq], bummer_volume[seq]);
+        buzzerSet(bummer_freq[seq], 1000);
     } else {
         buzzerSet(0, 0);
     }

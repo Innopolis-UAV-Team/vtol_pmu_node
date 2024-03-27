@@ -68,3 +68,19 @@ uint32_t PwmPeriphery::get_duration(PwmPin pwm_pin) {
 
     return pwm_duration;
 }
+
+uint32_t PwmPeriphery::get_frequency(PwmPin pwm_pin) {
+    uint32_t pwm_frequency;
+
+    switch (pwm_pin) {
+        case PwmPin::PWM_BUZZER:
+            pwm_frequency = 1000000 / TIM4->ARR;
+            break;
+
+        default:
+            pwm_frequency = 0;
+            break;
+    }
+
+    return pwm_frequency;
+}
