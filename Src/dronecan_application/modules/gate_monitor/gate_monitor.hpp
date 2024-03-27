@@ -14,6 +14,13 @@ extern "C" {
 
 #include "../../logger.hpp"
 
+enum class ModuleStatus: uint8_t {
+    ModuleOK        = 0,
+    ModuleWARN      = 1,
+    ModuleCRITICAL  = 2,
+    ModuleERROR     = 3
+}
+
 enum GateStatus : bool {
     GateStatusOK      = 0,
     GateStatusERROR   = 1,
@@ -22,7 +29,7 @@ enum GateStatus : bool {
 class GateMonitor {
 public:
     // static GateMonitor &get_instance();
-    int8_t process();
+    ModuleStatus process();
 
     static uint16_t number_of_broken_gates;
 
@@ -42,7 +49,7 @@ private:
 
     uint32_t _last_spin_time_ms;
     static uint16_t gate_threshold;
-    int8_t error_flag = 0;
+    ModuleStatus error_flag = ModuleStatus::ModuleOK;
 
     // GateMonitor& operator = (const GateMonitor&) = delete;
     // GateMonitor(GateMonitor &other) = delete;

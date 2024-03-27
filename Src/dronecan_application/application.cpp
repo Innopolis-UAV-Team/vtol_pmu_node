@@ -37,8 +37,9 @@ void application_entry_point() {
 
     Logger logger = Logger("entry");
 
+    ModuleStatus gate_monitor_status = ModuleStatus::ModuleOK;
     while(true) {
-        gate_monitor.process();
+        gate_monitor_status = gate_monitor.process();
         LedPeriphery::toggle();
         uavcanSpinOnce();
         battery.process();
