@@ -32,7 +32,13 @@ void application_entry_point() {
     VtolBattery battery;
     battery.init();
 
+    GateMonitor gate_monitor;
+    gate_monitor.init();
+
+    Logger logger = Logger("entry");
+
     while(true) {
+        gate_monitor.process();
         LedPeriphery::toggle();
         uavcanSpinOnce();
         battery.process();

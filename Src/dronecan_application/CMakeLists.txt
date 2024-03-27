@@ -17,6 +17,7 @@ set(applicationSourceCode
     ${libparamsSrc}
     ${DRONECAN_SOURCES}
     ${APPLICATION_DIR}/application.cpp
+    ${APPLICATION_DIR}/logger.cpp
     ${APPLICATION_DIR}/modules/battery/battery.cpp
     ${APPLICATION_DIR}/modules/buzzer/buzzer.cpp
     ${APPLICATION_DIR}/modules/gate_monitor/gate_monitor.cpp

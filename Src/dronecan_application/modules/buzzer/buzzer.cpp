@@ -9,7 +9,7 @@
 #include "periphery/pwm/pwm.hpp"
 
 Buzzer::Buzzer() {
-
+    
 }
 
 int8_t Buzzer::init() {
