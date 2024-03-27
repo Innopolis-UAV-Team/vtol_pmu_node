@@ -20,7 +20,7 @@ class Buzzer {
 public:
     Buzzer();
     int8_t init();
-    void process(bool error_flag);
+    void process(uint8_t error_flag);
     void buzzerSet(uint32_t frequency, uint32_t duration);
     
 private:
