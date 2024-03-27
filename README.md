@@ -1,6 +1,6 @@
 # VTOL PMU DroneCAN application
 
-> Developers docs: [DroneCAN template application](https://github.com/RaccoonlabDev/mini_v2_node/wiki/dronecan).
+> Developers docs: [DroneCAN template application](https://github.com/RaccoonlabDev/mini_v2_node/wiki/DroneCAN-application).
 
 ### 1. Brief hardware info
 
