@@ -4,10 +4,10 @@ battery.soc_pct:
   enum: PARAM_BATTERY_SOC_PCT
   flags: mutable
   default: -1
-  min: 0
+  min: -1
   max: 127
 
-battery.id:
+battery.battery_id:
   type: Integer
   note: Value of battery_id field in BatteryInfo message
   enum: PARAM_BATTERY_ID
@@ -33,3 +33,21 @@ battery.capacity_mah:
   default: 20000
   min: 4000
   max: 80000
+
+battery.full_voltage_mv:
+  type: Integer
+  note: Full battery voltage, mV.
+  enum: PARAM_BATTERY_FULL_VOLTAGE_MV
+  flags: mutable
+  default: 50400
+  min: 5000
+  max: 100000
+
+battery.empty_voltage_mv:
+  type: Integer
+  note: Full battery voltage, mV.
+  enum: PARAM_BATTERY_EMPTY_VOLTAGE_MV
+  flags: mutable
+  default: 39060
+  min: 3000
+  max: 100000
