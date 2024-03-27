@@ -19,7 +19,7 @@ enum class ModuleStatus: uint8_t {
     ModuleWARN      = 1,
     ModuleCRITICAL  = 2,
     ModuleERROR     = 3
-}
+};
 
 enum GateStatus : bool {
     GateStatusOK      = 0,
