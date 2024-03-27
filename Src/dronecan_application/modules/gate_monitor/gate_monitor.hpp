@@ -24,7 +24,7 @@ public:
     // static GateMonitor &get_instance();
     int8_t process();
 
-    static uint8_t number_of_broken_gates;
+    static uint16_t number_of_broken_gates;
 
     static GateStatus gate_2_status;
     static GateStatus gate_3_status;
@@ -36,10 +36,13 @@ public:
     
 private:
     int8_t check_gate(AdcChannel channel);
-    static Logger logger;
+    Logger logger;
     void update_params();
+    void spin_once();
 
-    static uint8_t gate_threshold;
+    uint32_t _last_spin_time_ms;
+    static uint16_t gate_threshold;
+    int8_t error_flag = 0;
 
     // GateMonitor& operator = (const GateMonitor&) = delete;
     // GateMonitor(GateMonitor &other) = delete;
