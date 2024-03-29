@@ -25,14 +25,18 @@ class GateMonitor {
 public:
     ModuleStatus process();
 
-    uint8_t n_gates = 3;
+    static const uint8_t n_gates = 3;
     uint8_t is_gate_broken[3];
 
     GateMonitor();
     void init(const char* logger_source = "GateMonitor");
+    static const char gate_names[3];
     
 private:
-    static constexpr AdcChannel gate_channels[] = {AdcChannel::ADC_GATE_2, AdcChannel::ADC_GATE_3, AdcChannel::ADC_GATE_4};
+    static constexpr AdcChannel gate_channels[] = { 
+                                        AdcChannel::ADC_GATE_2, 
+                                        AdcChannel::ADC_GATE_3, 
+                                        AdcChannel::ADC_GATE_4};
     
     void check_gates();
     void update_params();
