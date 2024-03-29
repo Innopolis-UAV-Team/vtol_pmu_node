@@ -22,10 +22,10 @@ ModuleStatus GateMonitor::process() {
         update_params();
         check_gates();
 
-        char buffer[] = "Gate failure (";
+        char buffer[] = "Gate failure ()";
         if (crnt_time_ms > next_error_publish_ms) {
             uint32_t shift_next_publish_ms = 0;
-            for (int i = 0; i < n_gates;) {
+            for (int i = 0; i < n_gates;) 
                 if (is_gate_broken[i] == 1) {
                     shift_next_publish_ms = 1000;
                     buffer[14 + i] = is_gate_broken[i] ? gate_names[i] : ' ';
