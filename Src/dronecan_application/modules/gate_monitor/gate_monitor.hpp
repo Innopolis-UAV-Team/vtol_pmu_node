@@ -15,44 +15,33 @@ extern "C" {
 #include "../../logger.hpp"
 
 enum class ModuleStatus: uint8_t {
-    ModuleOK        = 0,
-    ModuleWARN      = 1,
-    ModuleCRITICAL  = 2,
-    ModuleERROR     = 3
-};
-
-enum GateStatus : bool {
-    GateStatusOK      = 0,
-    GateStatusERROR   = 1,
+    MODULE_OK        = 0,
+    MODULE_WARN      = 1,
+    MODULE_CRITICAL  = 2,
+    MODULE_ERROR     = 3
 };
 
 class GateMonitor {
 public:
-    // static GateMonitor &get_instance();
     ModuleStatus process();
 
-    static uint16_t number_of_broken_gates;
+    uint8_t n_gates = 3;
+    uint8_t is_gate_broken[3];
 
-    static GateStatus gate_2_status;
-    static GateStatus gate_3_status;
-    static GateStatus gate_4_status;
-
-// protected:
     GateMonitor();
-    int8_t init();
+    void init(const char* logger_source = "GateMonitor");
     
 private:
-    int8_t check_gate(AdcChannel channel);
-    Logger logger;
+    static constexpr AdcChannel gate_channels[] = {AdcChannel::ADC_GATE_2, AdcChannel::ADC_GATE_3, AdcChannel::ADC_GATE_4};
+    
+    void check_gates();
     void update_params();
     void spin_once();
 
-    uint32_t _last_spin_time_ms;
+    Logger logger;
     static uint16_t gate_threshold;
-    ModuleStatus error_flag = ModuleStatus::ModuleOK;
+    ModuleStatus error_flag = ModuleStatus::MODULE_OK;
 
-    // GateMonitor& operator = (const GateMonitor&) = delete;
-    // GateMonitor(GateMonitor &other) = delete;
 };
 
 #ifdef __cplusplus

@@ -33,11 +33,9 @@ void application_entry_point() {
     battery.init();
 
     GateMonitor gate_monitor;
-    gate_monitor.init();
+    gate_monitor.init("PMU");
 
-    Logger logger = Logger("entry");
-
-    ModuleStatus gate_monitor_status = ModuleStatus::ModuleOK;
+    ModuleStatus gate_monitor_status = ModuleStatus::MODULE_OK;
     while(true) {
         gate_monitor_status = gate_monitor.process();
         LedPeriphery::toggle();

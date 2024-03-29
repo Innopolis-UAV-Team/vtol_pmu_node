@@ -4,90 +4,52 @@
 #include "gate_monitor.hpp"
 
 
-GateStatus GateMonitor::gate_2_status = GateStatus::GateStatusOK;
-GateStatus GateMonitor::gate_3_status = GateStatus::GateStatusOK;
-GateStatus GateMonitor::gate_4_status = GateStatus::GateStatusOK;
-
 uint16_t GateMonitor::gate_threshold = 0;
-uint16_t GateMonitor::number_of_broken_gates = 0;
-
 GateMonitor::GateMonitor(): logger("GateMonitor") {}
 
-int8_t GateMonitor::init() {
+void GateMonitor::init(const char* logger_source) {
+    logger.init(logger_source);
+    is_gate_broken[n_gates] = {};
 }
 
 ModuleStatus GateMonitor::process() {
     uint32_t crnt_time_ms = HAL_GetTick();
+    static uint32_t next_error_publish_ms = 0;
 
-    if (crnt_time_ms < _last_spin_time_ms + 200) {
-        return error_flag;
-    }
-    spin_once();
-    return error_flag;
-
-}
-
-void GateMonitor::spin_once(){
-    static uint32_t next_broken_error_publish_ms = 10000;
-    static uint32_t next_threshold_error_publish_ms = 10000;
-
-    uint32_t crnt_time_ms = HAL_GetTick();
-
-    update_params();
-    
-    char buffer[90];
     if (crnt_time_ms > 5000) {
-        check_gate(AdcChannel::ADC_GATE_2);
-        check_gate(AdcChannel::ADC_GATE_3);
-        check_gate(AdcChannel::ADC_GATE_4);
-        number_of_broken_gates = gate_2_status | gate_3_status | gate_3_status;
-        if (number_of_broken_gates != 0 & crnt_time_ms > next_broken_error_publish_ms) {
-            sprintf(buffer, "BROKEN GATES N: %d", number_of_broken_gates);
-            logger.log_error(buffer);
-            next_broken_error_publish_ms += 10000;
-            error_flag = ModuleStatus::ModuleERROR;
-        }
 
-        if (gate_threshold > 3 & crnt_time_ms > next_threshold_error_publish_ms) {
-            sprintf(buffer, "Threshold: %d, N gates: %d", gate_threshold, 3);
-            logger.log_error(buffer);
-            next_threshold_error_publish_ms += 10000;
-            error_flag = ModuleStatus::ModuleERROR;
+        update_params();
+        check_gates();
+
+        if (crnt_time_ms > next_error_publish_ms){
+            uint32_t shift_next_publish_ms = 0;
+            for (int i = 0; i < n_gates; i++) {
+                if (is_gate_broken[i] == 1 && 
+                    crnt_time_ms > next_error_publish_ms) {
+                    static char gate_msg[32];
+                    sprintf(gate_msg, "Gate failure (%d)\n", i+2);
+                    logger.log_error(gate_msg);
+                    shift_next_publish_ms = 1000;
+                }
+            }
+
+            next_error_publish_ms = crnt_time_ms + shift_next_publish_ms;
         }
     }
-    _last_spin_time_ms = crnt_time_ms;
-
+    return error_flag;
 }
-
 
 void GateMonitor::update_params() {
-    gate_threshold = paramsGetIntegerValue(IntParamsIndexes::PARAM_GATE_THRESHOLD);
+    gate_threshold = 
+        paramsGetIntegerValue(IntParamsIndexes::PARAM_GATE_THRESHOLD);
 }
 
 
-int8_t GateMonitor::check_gate(AdcChannel gate_adc_channel) {
-    GateStatus gate_status = GateStatus::GateStatusOK;
-    switch (gate_adc_channel) {
-    case AdcChannel::ADC_GATE_2:
-        gate_status = gate_2_status;
-        break;
-    
-    case AdcChannel::ADC_GATE_3:
-        gate_status = gate_3_status;
-        break;
-    
-    case AdcChannel::ADC_GATE_4:
-        gate_status = gate_4_status;
-        break;
-    
-    default:
-        // logger.log_debug("No such gate specified in ADC");
-        return -1;
-    }
-    if (gate_status != GateStatus::GateStatusERROR) {
-        if (AdcPeriphery::get(gate_adc_channel) / 64.0 < 1.4) {
-            gate_status = GateStatus::GateStatusERROR;
+void GateMonitor::check_gates() {
+    for (int i = 0; i < n_gates; i++) {
+        if (AdcPeriphery::get(gate_channels[i]) < gate_threshold) {
+            is_gate_broken[i] = 1; 
+            error_flag = ModuleStatus::MODULE_ERROR;
         }
     }
-    return 0;
 }
