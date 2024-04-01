@@ -22,7 +22,7 @@ public:
     int8_t init();
     void process(uint8_t error_flag);
     void buzzerSet(uint32_t frequency, uint32_t duration);
-    
+
 private:
     PwmPin pwm_pin;
     static Logger logger;
@@ -34,6 +34,7 @@ private:
     uint8_t arm_melody;
     uint32_t buzzer_frequency;
     uint32_t buzzer_duration;
+    static uint32_t crnt_time_ms;
 };
 
 #ifdef __cplusplus

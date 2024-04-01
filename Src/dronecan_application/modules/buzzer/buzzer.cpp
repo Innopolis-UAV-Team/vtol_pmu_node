@@ -6,6 +6,7 @@
 
 #define BEAP_SIZE (6*2 + 11)
 
+uint32_t Buzzer::crnt_time_ms = 0;
 Logger Buzzer::logger = Logger("Buzzer");
 Buzzer::Buzzer() {
 }
@@ -18,14 +19,16 @@ int8_t Buzzer::init() {
 }
 
 void Buzzer::buzzerSet(uint32_t frequency, uint32_t duration) {
-    if (frequency != PwmPeriphery::get_frequency(pwm_pin))
-    PwmPeriphery::set_frequency(pwm_pin, frequency);
-
+    if (frequency != PwmPeriphery::get_frequency(pwm_pin)) {
+        PwmPeriphery::set_frequency(pwm_pin, frequency);
+    }
+    
     if (duration != PwmPeriphery::get_duration(pwm_pin))
     PwmPeriphery::set_duration(pwm_pin, duration);
 }
 
 void Buzzer::process(uint8_t error_flag) {
+    crnt_time_ms = HAL_GetTick();
     static uint32_t next_upd_ms = 0;
     if (error_flag != 0) {
         switch (error_melody) {
@@ -45,18 +48,10 @@ void Buzzer::process(uint8_t error_flag) {
             break;
         }
     }
-    if (HAL_GetTick() > next_upd_ms) {
+    if (crnt_time_ms > next_upd_ms) {
         update_params();
         next_upd_ms += 200;
     }
-    static uint32_t next_logging_ms = 100;
-    if (HAL_GetTick() > next_logging_ms) {
-        static char buffer[90];
-        sprintf(buffer, "%ld %ld %ld %ld", PwmPeriphery::get_duration(pwm_pin), PwmPeriphery::get_frequency(pwm_pin), TIM4->ARR, TIM4->CCR2);
-        logger.log_debug(buffer);
-        next_logging_ms += 500;
-    }
-    PwmPeriphery::set_frequency(pwm_pin, HAL_GetTick() % 1500);
 }
 
 void Buzzer::update_params() {
@@ -70,40 +65,17 @@ void Buzzer::update_params() {
     }
 }
 
-// static uint32_t bummer_freq[BEAP_SIZE] = {
-//     987, 987,
-//     1175, 1175,
-//     0, 0,
-//     1175, 1175,
-//     987, 987,
-//     0, 0,
-
-//     1318,
-//     1175,
-//     1318,
-//     1175,
-//     1318,
-//     1175,
-//     1318,
-//     1175,
-//     1318,
-//     1480,
-//     1480,
-// };
-
-
 void Buzzer::buzzerBeapAnnoying() {
     const uint32_t beap_frequency = 2000;
-    const uint32_t beap_duration =  (HAL_GetTick() % 1000 < 500) ? 200000 : 0;
-    buzzerSet(beap_frequency, beap_duration);
+    bool beap_flag =  (crnt_time_ms % 1000 < 500) ? true : false;
+    buzzerSet(beap_frequency, (beap_flag? beap_frequency / 8 : 0));
 }
 
 void Buzzer::buzzerBeapTolerable() {
     const uint32_t beap_frequency = 432;
-    const uint32_t beap_duration =  (HAL_GetTick() % 3000 < 500) ? 200000 : 0;
-    buzzerSet(beap_frequency, beap_duration);
+    bool beap_flag =  (crnt_time_ms % 3000 < 500) ? true : false;
+    buzzerSet(beap_frequency, (beap_flag? beap_frequency / 2 : 0));
 }
-
 
 static uint32_t bummer_delay[BEAP_SIZE] = {
     207,
@@ -134,16 +106,9 @@ static uint32_t bummer_delay[BEAP_SIZE] = {
     207, 
     207,
     207, 
-    // 207
-
-    // 207, 
-    // 207,
-    // 207, 
-    // 207,
 };
 
 static uint32_t bummer_freq[BEAP_SIZE] = {
-  
   659,
   784,
   784,
@@ -172,19 +137,20 @@ static uint32_t bummer_freq[BEAP_SIZE] = {
   880,
   784,
   880,
-//   784,
-
-//   880,
-//   784,
-//   880,
 };
 
-
 void Buzzer::buzzerBeapBimmer() {
-    uint8_t seq = (HAL_GetTick() % 7000) / 200;
-    if (seq < BEAP_SIZE) {
-        buzzerSet(bummer_freq[seq], bummer_delay[seq]*1000);
+    static uint8_t n_note = 0;
+    static uint32_t last_note_start_time_ms = crnt_time_ms;
+
+    if (n_note < BEAP_SIZE) {
+        buzzerSet(bummer_freq[n_note], bummer_freq[n_note]/2);
+        if (crnt_time_ms - last_note_start_time_ms > bummer_delay[n_note]) {
+            last_note_start_time_ms = crnt_time_ms;
+            n_note++;
+        } 
     } else {
+        n_note = 0;
         buzzerSet(0, 0);
     }
 }
