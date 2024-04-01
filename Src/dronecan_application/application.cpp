@@ -44,6 +44,6 @@ void application_entry_point() {
         LedPeriphery::toggle();
         uavcanSpinOnce();
         battery.process();
-        buzzer.process(gate_monitor_status);
+        buzzer.process((uint8_t)gate_monitor_status);
     }
 }
