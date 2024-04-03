@@ -54,13 +54,15 @@ The node ignores all broken states first 5 seconds to prevent false positive fai
 2. TestBuzzer
     - I don't know how to automatically test it...
 4. TestGateMonitor
-    - TC1. Reboot the node.
-      Set `gate.threshold` to 0 (that means gates are always ok).
+    - TC1. Test good gate
+      Reboot the node.
+      Set `gate.threshold` to 4095 (that means gates are always ok).
       Wait for 15 seconds.
       Debug message should not appear.
       The NodeStatus should have good health.
-    - TC2. Reboot the node.
-      Set `gate.threshold` to 4095 (that means gates are always bad).
+    - TC2. Test bad gates
+      Reboot the node.
+      Set `gate.threshold` to 0 (that means gates are always bad).
       Verify, that the node publish LogMessage with 0.1 Hz rate (burst publishing are not allowed, first 5 second node publish nothing)
       The NodeStatus should have CRITICAL health.
 
