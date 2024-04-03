@@ -49,7 +49,7 @@ void GateMonitor::update_params() {
 
 void GateMonitor::check_gates() {
     for (int i = 0; i < n_gates; i++) {
-        if (AdcPeriphery::get(gate_channels[i]) < gate_threshold) {
+        if (AdcPeriphery::get(gate_channels[i]) > gate_threshold) {
             is_gate_broken[i] = 1; 
             error_flag = ModuleStatus::MODULE_ERROR;
         }

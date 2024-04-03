@@ -27,7 +27,7 @@ battery.model_instance_id:
 
 battery.capacity_mah:
   type: Integer
-  note: Full battery capacity, mAh. Default is 20000 mAh. Each cell is 4000 mAh.
+  note: Full battery capacity, mAh. Default is 20000 mAh. We have 4 [Tattu 10000 mAh 6S Lipo Battery](https://genstattu.com/tattu-plus-22-2v-25c-6s-liPo-battery-10000-mah-with-as150-xt150-plug.html) (2 in parallel, 2 in seies).
   enum: PARAM_BATTERY_CAPACITY_MAH
   flags: mutable
   default: 20000

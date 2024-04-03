@@ -1,6 +1,7 @@
 gate.threshold:
   type: Integer
-  note: If gate ADC less than this parameter, so it is broken.</br>If the node detects a broken gate once, it publishes LogMessage every 10 seconds until reboot.</br>The node ignore.
+  note: |
+    If gate ADC less than this parameter, so it is broken.</br>If the node detects a broken gate once, it publishes LogMessage every 10 seconds until reboot.</br><img src="../../Assets/gates.jpg" alt="drawing" width="300">
   enum: PARAM_GATE_THRESHOLD
   flags: mutable
   default: 1737
