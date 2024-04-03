@@ -7,3 +7,30 @@ gate.threshold:
   default: 1737
   min: 0
   max: 4096
+
+gate.status2:
+  type: Integer
+  note: Gate 2 raw ADC value
+  enum: PARAM_GATE_2_RAW_ADC
+  flags: mutable
+  default: 0
+  min: 0
+  max: 4095
+
+gate.status3:
+  type: Integer
+  note: Gate 3 raw ADC value
+  enum: PARAM_GATE_3_RAW_ADC
+  flags: mutable
+  default: 0
+  min: 0
+  max: 4095
+
+gate.status4:
+  type: Integer
+  note: Gate 4 raw ADC value
+  enum: PARAM_GATE_4_RAW_ADC
+  flags: mutable
+  default: 0
+  min: 0
+  max: 4095

@@ -16,6 +16,9 @@ The node has the following registers:
 |  12 | buzzer.duration         | This parameter is applied only if buzzer.melody=127. It means PWM duration, us. |
 |  13 | gate.threshold          | If gate ADC less than this parameter, so it is broken.</br>If the node detects a broken gate once, it publishes LogMessage every 10 seconds until reboot.</br><img src="../../Assets/gates.jpg" alt="drawing" width="300">
  |
+|  14 | gate.status2            | Gate 2 raw ADC value |
+|  15 | gate.status3            | Gate 3 raw ADC value |
+|  16 | gate.status4            | Gate 4 raw ADC value |
 
 > This docs was automatically generated. Do not edit it manually.
 

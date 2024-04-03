@@ -4,15 +4,15 @@
 #ifndef SRC_MODULES_GATE_MONITOR_HPP_
 #define SRC_MODULES_GATE_MONITOR_HPP_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
+#include <array>
 #include <stdint.h>
 #include "periphery/adc/adc.hpp"
 #include "params.hpp"
+#include "logger.hpp"
 
-#include "../../logger.hpp"
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 enum class ModuleStatus: uint8_t {
     MODULE_OK        = 0,
@@ -21,26 +21,31 @@ enum class ModuleStatus: uint8_t {
     MODULE_ERROR     = 3
 };
 
+struct GateInfo {
+    const AdcChannel adc_channel;
+    const ParamIndex_t parameter;
+    const char name;
+    bool is_broken{false};
+};
+
 class GateMonitor {
 public:
-    ModuleStatus process();
-
-    static const uint8_t n_gates = 3;
-    uint8_t is_gate_broken[3];
-
     GateMonitor();
     void init(const char* logger_source = "GateMonitor");
-    static const char gate_names[3];
-    
+    ModuleStatus process();
+
 private:
-    static constexpr AdcChannel gate_channels[] = { 
-                                        AdcChannel::ADC_GATE_2, 
-                                        AdcChannel::ADC_GATE_3, 
-                                        AdcChannel::ADC_GATE_4};
-    
     void check_gates();
     void update_params();
     void spin_once();
+
+    static const uint8_t n_gates = 3;
+
+    std::array<GateInfo, n_gates> gates_info{{
+        {AdcChannel::ADC_GATE_2, PARAM_GATE_2_RAW_ADC, '2'},
+        {AdcChannel::ADC_GATE_3, PARAM_GATE_3_RAW_ADC, '3'},
+        {AdcChannel::ADC_GATE_4, PARAM_GATE_4_RAW_ADC, '4'}
+    }};
 
     Logger logger;
     static uint16_t gate_threshold;
