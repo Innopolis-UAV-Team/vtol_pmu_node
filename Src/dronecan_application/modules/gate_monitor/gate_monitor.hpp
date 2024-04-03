@@ -15,10 +15,10 @@ extern "C" {
 #endif
 
 enum class ModuleStatus: uint8_t {
-    MODULE_OK        = 0,
-    MODULE_WARN      = 1,
-    MODULE_CRITICAL  = 2,
-    MODULE_ERROR     = 3
+    MODULE_OK        = 0,   // The module is functioning properly
+    MODULE_WARN      = 1,   // The module encountered a minor failure
+    MODULE_ERROR     = 2,   // The module encountered a major failure
+    MODULE_CRITICAL  = 3,   // The module suffered a fatal malfunction
 };
 
 struct GateInfo {

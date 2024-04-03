@@ -35,15 +35,16 @@ void application_entry_point() {
     GateMonitor gate_monitor;
     gate_monitor.init("PMU");
 
-    ModuleStatus gate_monitor_status = ModuleStatus::MODULE_OK;
     Buzzer buzzer;
     buzzer.init();
 
     while(true) {
-        gate_monitor_status = gate_monitor.process();
+        battery.process();
+        ModuleStatus gate_monitor_status = gate_monitor.process();
+        buzzer.process((uint8_t)gate_monitor_status);
+
+        uavcanSetNodeHealth((NodeStatusHealth_t)gate_monitor_status);
         LedPeriphery::toggle();
         uavcanSpinOnce();
-        battery.process();
-        buzzer.process((uint8_t)gate_monitor_status);
     }
 }

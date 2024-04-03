@@ -49,7 +49,7 @@ void GateMonitor::check_gates() {
     for (auto& gate : gates_info) {
         if (AdcPeriphery::get(gate.adc_channel) > gate_threshold) {
             gate.is_broken = true;
-            error_flag = ModuleStatus::MODULE_ERROR;
+            error_flag = ModuleStatus::MODULE_CRITICAL;
         }
     }
 }
