@@ -2,16 +2,14 @@
 // Distributed under the terms of the GPL v3 license, available in the file LICENSE.
 
 #include "battery.hpp"
-#include <algorithm>
 #include <math.h>
+#include <algorithm>
 #include "dronecan.h"
 #include "main.h"
 #include "params.hpp"
 #include "storage.h"
 #include "periphery/adc/adc.hpp"
 
-#define ADC_VOLTAGE_MULTIPLIER (19.0 * 3.3 / 4096.0) // 62.7  Volts when ADC is 3.3V (4095)
-#define ADC_CURRENT_MULTIPLIER 0.04884004884         // 200.0 Amper when ADC is 3.3V (4095)
 
 int8_t VtolBattery::init() {
     _battery_info.current = 0.0;
@@ -61,13 +59,18 @@ void VtolBattery::_spin_once() {
 }
 
 void VtolBattery::_update_voltage_and_current() {
-    float voltage = AdcPeriphery::get(AdcChannel::ADC_VIN) * ADC_VOLTAGE_MULTIPLIER;
+    constexpr float ADC_VOLTAGE_MULTIPLIER = (19.0 * 3.3 / 4096.0);
+    auto raw_vin_adc = AdcPeriphery::get(AdcChannel::ADC_VIN);
+    float voltage = raw_vin_adc * ADC_VOLTAGE_MULTIPLIER;
     _battery_info.voltage = voltage;
 
-    float current = AdcPeriphery::get(AdcChannel::ADC_CRNT) * ADC_CURRENT_MULTIPLIER;
-    _battery_info.current = current;
+    constexpr float ADC_CURRENT_OFFSET = -0.5;
+    constexpr float ADC_CURRENT_MULTIPLIER = 200.0 / 4095.0;
+    auto raw_current_adc = AdcPeriphery::get(AdcChannel::ADC_CRNT);
+    float current = ADC_CURRENT_OFFSET + raw_current_adc * ADC_CURRENT_MULTIPLIER;
+    _battery_info.current = std::clamp(current, 0.0f, 200.0f);
 
-    _battery_info.average_power_10sec = voltage * current;
+    _battery_info.average_power_10sec = _battery_info.voltage * _battery_info.current;
 }
 
 void VtolBattery::_update_temperature() {
