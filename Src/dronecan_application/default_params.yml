@@ -1,1 +1,16 @@
-uavcan.node.id:         39
+uavcan.node.id:             39
+battery.soc_pct:            -1
+battery.battery_id:         0
+battery.model_instance_id:  0
+battery.capacity_mah:       20000
+battery.full_voltage_mah:   5000
+battery.empty_voltage_mah:  4000
+buzzer.error_melody:        0
+buzzer.arm_melody:          0
+buzzer.frequency:           0
+buzzer.duration:            0
+gate.threshold:             1200
+gate.status2:               0
+gate.status3:               0
+gate.status4:               0
+system.name:                "arl.pmu"

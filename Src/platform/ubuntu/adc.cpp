@@ -2,6 +2,7 @@
 // Distributed under the terms of the GPL v3 license, available in the file LICENSE.
 
 #include "periphery/adc/adc.hpp"
+#include <array>
 
 int8_t AdcPeriphery::init() {
     _is_adc_already_inited = true;
@@ -13,5 +14,15 @@ uint16_t AdcPeriphery::get(AdcChannel channel) {
         return 0;
     }
 
-    return 0;
+    constexpr auto CHANNELS_AMOUNT = static_cast<uint16_t>(AdcChannel::ADC_NUMBER_OF_CNANNELS);
+    constexpr std::array<uint16_t, CHANNELS_AMOUNT> adc_values = {
+        320,    // vin
+        10,     // gate2
+        25,     // current
+        10,     // gate3
+        10,     // gate4
+        3100,   // temperature
+        10      // version
+    };
+    return adc_values[static_cast<uint8_t>(channel)];
 }
