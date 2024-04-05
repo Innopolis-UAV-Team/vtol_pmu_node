@@ -41,6 +41,7 @@ void VtolBattery::_update_params() {
 
     _params.full_voltage = 0.001f * paramsGetIntegerValue(PARAM_BATTERY_FULL_VOLTAGE_MV);
     _params.empty_voltage = 0.001f * paramsGetIntegerValue(PARAM_BATTERY_EMPTY_VOLTAGE_MV);
+    _params.current_offset = 0.001f * paramsGetIntegerValue(PARAM_BATTERY_CURRENT_OFFSET_MA);
     _params.pmu_soc_pct = paramsGetIntegerValue(PARAM_BATTERY_SOC_PCT);
 
     _params.correct = _params.full_voltage > _params.empty_voltage;
@@ -64,10 +65,9 @@ void VtolBattery::_update_voltage_and_current() {
     float voltage = raw_vin_adc * ADC_VOLTAGE_MULTIPLIER;
     _battery_info.voltage = voltage;
 
-    constexpr float ADC_CURRENT_OFFSET = -0.5;
     constexpr float ADC_CURRENT_MULTIPLIER = 200.0 / 4095.0;
     auto raw_current_adc = AdcPeriphery::get(AdcChannel::ADC_CRNT);
-    float current = ADC_CURRENT_OFFSET + raw_current_adc * ADC_CURRENT_MULTIPLIER;
+    float current = _params.current_offset + raw_current_adc * ADC_CURRENT_MULTIPLIER;
     _battery_info.current = std::clamp(current, 0.0f, 200.0f);
 
     _battery_info.average_power_10sec = _battery_info.voltage * _battery_info.current;

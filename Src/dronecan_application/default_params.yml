@@ -5,6 +5,7 @@ battery.model_instance_id:  0
 battery.capacity_mah:       20000
 battery.full_voltage_mah:   5000
 battery.empty_voltage_mah:  4000
+battery.current_offset:     0
 buzzer.error_melody:        0
 buzzer.arm_melody:          0
 buzzer.frequency:           0

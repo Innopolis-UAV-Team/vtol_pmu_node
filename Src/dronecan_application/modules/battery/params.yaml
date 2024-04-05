@@ -51,3 +51,12 @@ battery.empty_voltage_mv:
   default: 39060
   min: 3000
   max: 100000
+
+battery.current_offset_ma:
+  type: Integer
+  note: Current sensor measurement offset, mA. </br> I = offset_ma * 0.001 + MULTIPLIER * raw_adc
+  enum: PARAM_BATTERY_CURRENT_OFFSET_MA
+  flags: mutable
+  default: 0
+  min: -5000
+  max: 0

@@ -14,6 +14,7 @@ extern "C" {
 struct BatteryParameters {
     float full_voltage;
     float empty_voltage;
+    float current_offset;
     int8_t pmu_soc_pct;
     bool correct{false};
 };
