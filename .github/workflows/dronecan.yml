@@ -8,53 +8,24 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 10
     steps:
-      # Here is hack to be able to checkout a repo with a private submodules:
-      # On the one hand, classic tokens are not recommended.
-      # On the other hand, fine-grained tokens are scoped only by a single orgranization.
-      # Since the root repo or any of submodules can be private, we can't rely on a single PAT
-      # So, let's checkout all submodules separately, then update submodules.
-      - name: 1. Checkout root repository (public or private)
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-      - name: 2. Checkout libparams (public)
-        uses: actions/checkout@v3
-        with:
-          repository: PonomarevDA/libparams
-          path: 'Libs/libparams'
-      - name: 3. Checkout stm32-cube-project (private)
-        uses: actions/checkout@v3
-        with:
-          repository: Innopolis-UAV-Team/vtol-pmu-ioc
-          path: 'Libs/stm32-cube-project'
+          submodules: recursive
+          fetch-depth: 0  # fetch all history for all branches and tags
           token: ${{ secrets.VTOL_PMU_IOC_TOKEN }}
-      - name: 4. Checkout tools (public)
-        uses: actions/checkout@v3
-        with:
-          repository: PonomarevDA/tools
-          path: 'scripts/tools'
-      - name: 5. Checkout DroneCAN (private)
-        uses: actions/checkout@v3
-        with:
-          repository: PonomarevDA/dronecan_application
-          path: 'Libs/Dronecan'
-          token: ${{ secrets.DRONECAN_APPLICATION_TOKEN }}
-          fetch-depth: 0
-      - name: 6. Update submodules
-        run: git submodule update --init --recursive
 
       - name: Install dependencies
         run: ./scripts/tools/install_for_ubuntu.sh --yes
 
-      - name: 7. Install raccoonlab-tools
+      - name: Install raccoonlab-tools
         run: |
           pip install pyserial python-can pydronecan pycyphal pytest pytest-asyncio yakut
           pip install -i https://test.pypi.org/simple/ raccoonlab-tools
 
-      - name: 7. Build the target
+      - name: Build the target
         run: make ${{ matrix.target }}
 
-      - name: 8. If SITL then run and execute pytest tests
+      - name: If SITL then run and execute pytest tests
         if: ${{ matrix.target == 'sitl_dronecan' }}
         run: |
           make run &
