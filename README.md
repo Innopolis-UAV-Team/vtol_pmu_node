@@ -1,14 +1,16 @@
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=Innopolis-UAV-Team_vtol_pmu_node&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=Innopolis-UAV-Team_vtol_pmu_node) [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=Innopolis-UAV-Team_vtol_pmu_node&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=Innopolis-UAV-Team_vtol_pmu_node) [![dronecan](https://github.com/Innopolis-UAV-Team/vtol_pmu_node/actions/workflows/dronecan.yml/badge.svg)](https://github.com/Innopolis-UAV-Team/vtol_pmu_node/actions/workflows/dronecan.yml)
+
 # VTOL PMU DroneCAN application
 
 > Developers docs: [DroneCAN template application](https://github.com/RaccoonlabDev/mini_v2_node/wiki/DroneCAN-application).
 
-### 1. Brief hardware info
+### 1. BRIEF HARDWARE INFO
 
 | View | STM32CubeMX | Pinout |
 | ---- | ----------- | ------ |
 | <img src="Assets/view.jpg" alt="drawing" width="200"> | <img src="https://github.com/Innopolis-UAV-Team/vtol-pmu-ioc/raw/6530f3319c28916c0268c4aedbf7e330f0dfdd90/Assets/stm32cubemx.png" alt="drawing" width="200"> | pinout |
 
-### 2. Application description and software design
+### 2. APPLICATION DESCRIPTION AND DESIGN
 
 The PMU node does 3 things:
 1. Battery. This module estimates the battery info based on ADC voltage and current measurements and publishes [BatteryInfo](https://dronecan.github.io/Specification/7._List_of_standard_data_types/#batteryinfo) message.
@@ -48,7 +50,7 @@ The node ignores all broken states first 5 seconds to prevent false positive fai
 
 The buzzer notifies with sound about dead gates.
 
-### 3. Parameters
+### 3. PARAMETERS
 
 Here is a list of parameters.
 
@@ -56,7 +58,7 @@ Here is a list of parameters.
 
 More details you can find in the parameters auto-generated documentation [Src/dronecan_application/README.md](Src/dronecan_application/README.md).
 
-### 4. Test Cases
+### 4. TEST CASES
 
 1. TestBatteryInfo
     - TC1. Publish rate must be 1 Hz (plus minus 50 ms is acceptable)
@@ -81,11 +83,11 @@ More details you can find in the parameters auto-generated documentation [Src/dr
       Verify, that the node publish LogMessage with 0.1 Hz rate (burst publishing are not allowed, first 5 second node publish nothing)
       The NodeStatus should have CRITICAL health.
 
-### 5. How to upload a firmware?
+### 5. HOW TO UPLOAD A FIRMWARE?
 
 <img src="Assets/swd.png" alt="drawing" width="400">
 
-### 6. Notes
+### 6. NOTES
 
 **Current ADC**
 
