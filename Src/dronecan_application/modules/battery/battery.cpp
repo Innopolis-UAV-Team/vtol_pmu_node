@@ -54,6 +54,7 @@ void VtolBattery::_spin_once() {
     _update_temperature();
     _update_soc();
     _update_remaining();
+    _update_gate_info();
 
     dronecan_equipment_battery_info_publish(&_battery_info, &_transfer_id);
     _transfer_id++;
@@ -106,4 +107,11 @@ void VtolBattery::_update_remaining() {
         remaining_capacity_wh = NAN;
     }
     _battery_info.remaining_capacity_wh = remaining_capacity_wh;
+}
+
+void VtolBattery::_update_gate_info() {
+    auto gate2 = AdcPeriphery::get(AdcChannel::ADC_GATE_2);
+    auto gate3 = AdcPeriphery::get(AdcChannel::ADC_GATE_3);
+    auto gate4 = AdcPeriphery::get(AdcChannel::ADC_GATE_4);
+    _battery_info.hours_to_full_charge = std::max({gate2, gate3, gate4});
 }

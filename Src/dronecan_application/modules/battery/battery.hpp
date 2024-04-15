@@ -31,6 +31,7 @@ private:
     void _update_temperature();
     void _update_soc();
     void _update_remaining();
+    void _update_gate_info();
 
     BatteryParameters _params;
     uint32_t _last_spin_time_ms{0};
