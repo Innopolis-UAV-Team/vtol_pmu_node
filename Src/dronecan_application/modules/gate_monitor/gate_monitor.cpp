@@ -31,7 +31,6 @@ ModuleStatus GateMonitor::process() {
                 if (gates_info[i].is_broken) {
                     buffer[14 + i] = gates_info[i].name;
                 }
-                buffer[14 + (++i)] = ')';
             }
 
             if (error_flag != ModuleStatus::MODULE_OK) {
