@@ -4,8 +4,8 @@
 #ifndef SRC_MODULES_GATE_MONITOR_HPP_
 #define SRC_MODULES_GATE_MONITOR_HPP_
 
-#include <array>
 #include <stdint.h>
+#include <array>
 #include "periphery/adc/adc.hpp"
 #include "params.hpp"
 #include "logger.hpp"
@@ -22,6 +22,7 @@ enum class ModuleStatus: uint8_t {
 };
 
 struct GateInfo {
+    float filtered;
     const AdcChannel adc_channel;
     const ParamIndex_t parameter;
     const char name;
@@ -42,15 +43,14 @@ private:
     static const uint8_t n_gates = 3;
 
     std::array<GateInfo, n_gates> gates_info{{
-        {AdcChannel::ADC_GATE_2, PARAM_GATE_2_RAW_ADC, '2'},
-        {AdcChannel::ADC_GATE_3, PARAM_GATE_3_RAW_ADC, '3'},
-        {AdcChannel::ADC_GATE_4, PARAM_GATE_4_RAW_ADC, '4'}
+        {0.0, AdcChannel::ADC_GATE_2, PARAM_GATE_2_RAW_ADC, '2'},
+        {0.0, AdcChannel::ADC_GATE_3, PARAM_GATE_3_RAW_ADC, '3'},
+        {0.0, AdcChannel::ADC_GATE_4, PARAM_GATE_4_RAW_ADC, '4'}
     }};
 
     Logger logger;
     static uint16_t gate_threshold;
     ModuleStatus error_flag = ModuleStatus::MODULE_OK;
-
 };
 
 #ifdef __cplusplus
