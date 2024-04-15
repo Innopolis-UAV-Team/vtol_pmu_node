@@ -2,6 +2,7 @@
 // Distributed under the terms of the GPL v3 license, available in the file LICENSE.
 
 #include "gate_monitor.hpp"
+#include "algorithms.hpp"
 
 
 uint16_t GateMonitor::gate_threshold = 0;
@@ -16,7 +17,6 @@ ModuleStatus GateMonitor::process() {
     static uint32_t next_error_publish_ms = 0;
 
     if (crnt_time_ms > 5000) {
-
         update_params();
         check_gates();
 
@@ -47,7 +47,8 @@ void GateMonitor::update_params() {
 
 void GateMonitor::check_gates() {
     for (auto& gate : gates_info) {
-        if (AdcPeriphery::get(gate.adc_channel) > gate_threshold) {
+        movingAverage(&gate.filtered, AdcPeriphery::get(gate.adc_channel), 5);
+        if (gate.filtered > gate_threshold) {
             gate.is_broken = true;
             error_flag = ModuleStatus::MODULE_CRITICAL;
         }
