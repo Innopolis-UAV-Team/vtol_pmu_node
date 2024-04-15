@@ -52,7 +52,7 @@ void GateMonitor::update_params() {
 
 void GateMonitor::check_gates() {
     for (auto& gate : gates_info) {
-        movingAverage(&gate.filtered, AdcPeriphery::get(gate.adc_channel), 5);
+        movingAverage(&gate.filtered, AdcPeriphery::get(gate.adc_channel), 50);
         if (gate.filtered > gate_threshold) {
             gate.is_broken = true;
             error_flag = ModuleStatus::MODULE_CRITICAL;
