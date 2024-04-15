@@ -49,6 +49,7 @@ private:
     }};
 
     Logger logger;
+    uint32_t _last_spin_time_ms{0};
     static uint16_t gate_threshold;
     ModuleStatus error_flag = ModuleStatus::MODULE_OK;
 };

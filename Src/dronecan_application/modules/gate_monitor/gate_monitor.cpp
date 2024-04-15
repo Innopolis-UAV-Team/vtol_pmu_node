@@ -14,6 +14,11 @@ void GateMonitor::init(const char* logger_source) {
 
 ModuleStatus GateMonitor::process() {
     uint32_t crnt_time_ms = HAL_GetTick();
+    if (crnt_time_ms < _last_spin_time_ms + 20) {
+        return error_flag;
+    }
+    _last_spin_time_ms = crnt_time_ms;
+
     static uint32_t next_error_publish_ms = 0;
 
     if (crnt_time_ms > 5000) {
