@@ -27,7 +27,7 @@ ModuleStatus GateMonitor::process() {
 
         if (crnt_time_ms > next_error_publish_ms) {
             char buffer[] = "Gate failure (   )";
-            for (int i = 0; i < n_gates;) {
+            for (int i = 0; i < n_gates; i++) {
                 if (gates_info[i].is_broken) {
                     buffer[14 + i] = gates_info[i].name;
                 }
