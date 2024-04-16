@@ -98,7 +98,7 @@ More details you can find in the parameters auto-generated documentation [Src/dr
 ```
 ADC_RESOLUTION = 12 bit
 ADC_RAW_MAX = 4095
-MAX_CURRENT = 600 A
+MAX_CURRENT = 200 A
 CURRENT_SENSETIVITY = 146.5 mA
 ```
 
