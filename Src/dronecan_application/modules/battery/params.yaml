@@ -60,3 +60,30 @@ battery.current_offset_ma:
   default: 0
   min: -5000
   max: 0
+
+battery.max_current:
+  type: Integer
+  note: Max measurement current
+  enum: PARAM_BATTERY_MAX_CURRENT
+  flags: mutable
+  default: 200
+  min: 0
+  max: 1000
+
+battery.enable_thermistor_up:
+  type: Integer
+  note: Enable thermistor up
+  enum: PARAM_BATTERY_ENABLE_THERMISTOR_UP
+  flags: mutable
+  default: 0
+  min: 0
+  max: 1
+
+battery.enable_thermistor_down:
+  type: Integer
+  note: Enable thermistor down
+  enum: PARAM_BATTERY_ENABLE_THERMISTOR_DOWN
+  flags: mutable
+  default: 0
+  min: 0
+  max: 1

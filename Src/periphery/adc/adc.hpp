@@ -17,8 +17,9 @@ enum class AdcChannel : uint8_t {
     ADC_GATE_3              = 3,
     ADC_GATE_4              = 4,
     ADC_TEMPERATURE         = 5,
-    ADC_VERSION             = 6,
-    ADC_NUMBER_OF_CNANNELS  = 7,
+    ADC_THERMISTOR_UP       = 6,
+    ADC_THERMISTOR_DOWN     = 7,
+    ADC_NUMBER_OF_CNANNELS  = 8,
 };
 
 class AdcPeriphery {
