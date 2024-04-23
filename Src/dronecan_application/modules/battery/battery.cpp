@@ -75,12 +75,10 @@ void VtolBattery::_update_voltage_and_current() {
 }
 
 void VtolBattery::_update_temperature() {
-    uint16_t adc_temperature = AdcPeriphery::get(AdcChannel::ADC_TEMPERATURE);
-    static const uint16_t TEMP_REF = 25;
-    static const uint16_t ADC_REF = 1750;   ///< v_ref / 3.3 * 4095
-    static const uint16_t AVG_SLOPE = 5;    ///< avg_slope/(3.3/4096)
-    float kelvin = (ADC_REF - adc_temperature) / AVG_SLOPE + TEMP_REF + 273.15;
-    _battery_info.temperature = kelvin;
+    // B57861-S 103-F40, 10 kilohm, 1%, NTCthermistor
+    float raw = AdcPeriphery::get(AdcChannel::ADC_VERSION);
+    float celcius = 0.00000267f*raw*raw + 0.02734039f*raw + 5.48039378f;
+    _battery_info.temperature = celcius + 273.15f;
 }
 
 void VtolBattery::_update_soc() {
