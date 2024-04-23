@@ -2,7 +2,7 @@
 // Distributed under the terms of the GPL v3 license, available in the file LICENSE.
 
 #include <string.h>
-#include <chrono>
+#include <chrono>  // NOLINT
 #include <iostream>
 #include "main.h"
 #include "application.hpp"
