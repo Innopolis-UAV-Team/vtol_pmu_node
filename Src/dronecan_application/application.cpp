@@ -17,11 +17,12 @@ static bool isCharacter(uint8_t byte) {
 }
 
 void application_entry_point() {
-    paramsInit(static_cast<uint8_t>(IntParamsIndexes::INTEGER_PARAMS_AMOUNT), NUM_OF_STR_PARAMS, -1, 1);
+    paramsInit((ParamIndex_t)IntParamsIndexes::INTEGER_PARAMS_AMOUNT, NUM_OF_STR_PARAMS, -1, 1);
     paramsLoad();
 
     auto node_id = paramsGetIntegerValue(PARAM_UAVCAN_NODE_ID);
-    auto node_name = (const char*)paramsGetStringValue(static_cast<uint8_t>(IntParamsIndexes::INTEGER_PARAMS_AMOUNT));
+    auto node_name_idx = static_cast<ParamIndex_t>(IntParamsIndexes::INTEGER_PARAMS_AMOUNT);
+    auto node_name = (const char*)paramsGetStringValue(node_name_idx);
 
     LedPeriphery::reset();
     AdcPeriphery::init();

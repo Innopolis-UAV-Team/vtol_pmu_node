@@ -1,0 +1,14 @@
+name: code_style
+on: [push]
+
+jobs:
+  cpplint:
+    timeout-minutes: 1
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip3 install cpplint
+      - name: cpplint
+        run: |
+          cpplint Src/dronecan_application/*pp Src/dronecan_application/modules/*/*pp
+          cpplint Src/periphery/*/*pp Src/platform/*/*pp

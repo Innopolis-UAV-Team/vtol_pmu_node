@@ -17,20 +17,20 @@ const uint32_t quarter = 207;
 static uint32_t bummer_delay[BEAP_SIZE] = {
     quarter *3/2,
     quarter * 13 / 2,
-    quarter / 2, //pause
+    quarter / 2,        // pause
     quarter *3/2,
     quarter * 13 / 2,
-    quarter / 2, //pause
+    quarter / 2,        // pause
     quarter,
-    quarter, 
-    quarter, 
-    quarter, 
-    quarter, 
     quarter,
-    quarter, 
-    quarter, 
+    quarter,
+    quarter,
+    quarter,
+    quarter,
+    quarter,
+    quarter,
 
-    quarter, 
+    quarter,
     quarter * 13 / 2,
     quarter * 2,
 };
@@ -61,7 +61,7 @@ static uint32_t bummer_freq[BEAP_SIZE] = {
 int8_t Buzzer::init() {
     PwmPeriphery::init(pwm_pin);
     PwmPeriphery::set_duration(pwm_pin, 0);
-            
+
     auto sub_id = uavcanSubscribe(UAVCAN_EQUIPMENT_INDICATION_BEEPCOMMAND_SIGNATURE,
                                   UAVCAN_EQUIPMENT_INDICATION_BEEPCOMMAND_ID,
                                   callback);
@@ -91,7 +91,7 @@ void Buzzer::process(uint8_t curr_error_flag) {
     } else {
         if (crnt_time_ms > cmd_end_time_ms) {
             command.duration = 0;
-            PwmPeriphery::set_duration(pwm_pin,0);
+            PwmPeriphery::set_duration(pwm_pin, 0);
         }
     }
 
@@ -111,8 +111,8 @@ void Buzzer::update_params() {
     error_buzzer_frequency = paramsGetIntegerValue(IntParamsIndexes::PARAM_BUZZER_FREQUENCY);
     verbose = paramsGetIntegerValue(IntParamsIndexes::PARAM_BUZZER_VERBOSE);
     error_buzzer_period = paramsGetIntegerValue(IntParamsIndexes::PARAM_BUZZER_BEEP_PERIOD);
-    float beep_fraction = paramsGetIntegerValue(IntParamsIndexes::PARAM_BUZZER_BEEP_FRACTION)/100.0f;
-    error_buzzer_sound_duration = error_buzzer_period * beep_fraction;
+    float fraction = paramsGetIntegerValue(IntParamsIndexes::PARAM_BUZZER_BEEP_FRACTION) * 0.01f;
+    error_buzzer_sound_duration = error_buzzer_period * fraction;
 }
 
 void Buzzer::play_melody() {
@@ -150,14 +150,14 @@ void Buzzer::buzzerBeepAnnoying() {
     const uint32_t beep_frequency = 2000;
     buzzerSet(beep_frequency);
     bool beep_flag =  (crnt_time_ms % 1000 < 500) ? true : false;
-    if (! beep_flag ) PwmPeriphery::set_duration(pwm_pin,0);
+    if (!beep_flag) PwmPeriphery::set_duration(pwm_pin, 0);
 }
 
 void Buzzer::buzzerBeepTolerable() {
     const uint32_t beep_frequency = 432;
     buzzerSet(beep_frequency);
     bool beep_flag =  (crnt_time_ms % 3000 < 500) ? true : false;
-    if (! beep_flag ) PwmPeriphery::set_duration(pwm_pin,0);
+    if (!beep_flag) PwmPeriphery::set_duration(pwm_pin, 0);
 }
 
 void Buzzer::buzzerBeepBummer() {
@@ -167,15 +167,15 @@ void Buzzer::buzzerBeepBummer() {
     if (n_note < BEAP_SIZE) {
         buzzerSet(bummer_freq[n_note]);
         if (bummer_freq[n_note] == 1) {
-            PwmPeriphery::set_duration(pwm_pin,0);
+            PwmPeriphery::set_duration(pwm_pin, 0);
         }
         if (crnt_time_ms - last_note_start_time_ms > bummer_delay[n_note]) {
             last_note_start_time_ms = crnt_time_ms;
             n_note++;
-        } 
+        }
     } else {
         n_note = 0;
-        PwmPeriphery::set_duration(pwm_pin,0);
+        PwmPeriphery::set_duration(pwm_pin, 0);
     }
 }
 
