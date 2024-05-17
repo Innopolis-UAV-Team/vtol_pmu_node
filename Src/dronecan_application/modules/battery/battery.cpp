@@ -17,9 +17,13 @@ int8_t VtolBattery::init() {
     _battery_info.temperature = 0.0;
     _battery_info.average_power_10sec = 0;
     _battery_info.hours_to_full_charge = 0;
-    _battery_info.state_of_health_pct = 127;
+    _battery_info.state_of_health_pct = 0;
     _battery_info.state_of_charge_pct = 0;
     _battery_info.state_of_charge_pct_stdev = 0;
+
+#ifdef THERMISTOR_DOWN_GPIO_Port
+    HAL_GPIO_WritePin(THERMISTOR_DOWN_GPIO_Port, THERMISTOR_DOWN_Pin, GPIO_PIN_RESET);
+#endif
 
     return 0;
 }
@@ -42,7 +46,10 @@ void VtolBattery::_update_params() {
     _params.full_voltage = 0.001f * paramsGetIntegerValue(PARAM_BATTERY_FULL_VOLTAGE_MV);
     _params.empty_voltage = 0.001f * paramsGetIntegerValue(PARAM_BATTERY_EMPTY_VOLTAGE_MV);
     _params.current_offset = 0.001f * paramsGetIntegerValue(PARAM_BATTERY_CURRENT_OFFSET_MA);
-    _params.pmu_soc_pct = paramsGetIntegerValue(PARAM_BATTERY_SOC_PCT);
+    _params.max_current = paramsGetIntegerValue(PARAM_BATTERY_MAX_CURRENT);
+
+    _params.enable_thermistor_up = paramsGetIntegerValue(PARAM_BATTERY_ENABLE_THERMISTOR_UP);
+    _params.enable_thermistor_down = paramsGetIntegerValue(PARAM_BATTERY_ENABLE_THERMISTOR_DOWN);
 
     _params.correct = _params.full_voltage > _params.empty_voltage;
     auto capacity_mah = (float)paramsGetIntegerValue(PARAM_BATTERY_CAPACITY_MAH);
@@ -66,7 +73,7 @@ void VtolBattery::_update_voltage_and_current() {
     float voltage = raw_vin_adc * ADC_VOLTAGE_MULTIPLIER;
     _battery_info.voltage = voltage;
 
-    constexpr float ADC_CURRENT_MULTIPLIER = 200.0 / 4095.0;
+    float ADC_CURRENT_MULTIPLIER = _params.max_current / 4095.0;
     auto raw_current_adc = AdcPeriphery::get(AdcChannel::ADC_CRNT);
     float current = _params.current_offset + raw_current_adc * ADC_CURRENT_MULTIPLIER;
     _battery_info.current = std::clamp(current, 0.0f, 200.0f);
@@ -75,10 +82,34 @@ void VtolBattery::_update_voltage_and_current() {
 }
 
 void VtolBattery::_update_temperature() {
+    float raw;
+    float celcius;
+
     // B57861-S 103-F40, 10 kilohm, 1%, NTCthermistor
-    float raw = AdcPeriphery::get(AdcChannel::ADC_VERSION);
-    float celcius = 0.00000267f*raw*raw + 0.02734039f*raw + 5.48039378f;
-    _battery_info.temperature = celcius + 273.15f;
+    if (_params.enable_thermistor_up) {
+        raw = AdcPeriphery::get(AdcChannel::ADC_THERMISTOR_UP);
+        celcius = 0.00000267f*raw*raw + 0.02734039f*raw + 5.48039378f;
+        _battery_info.temperature = celcius;
+    } else {
+        _battery_info.temperature = 0.0;
+    }
+
+    // B57861-S 103-F40, 10 kilohm, 1%, NTCthermistor
+    if (_params.enable_thermistor_down) {
+        raw = AdcPeriphery::get(AdcChannel::ADC_THERMISTOR_DOWN);
+        celcius = 0.00000267f*raw*raw + 0.02734039f*raw + 5.48039378f;
+        _battery_info.state_of_health_pct = celcius;
+    } else {
+        _battery_info.state_of_health_pct = 0;
+    }
+
+    // STM32 temperature
+    raw = AdcPeriphery::get(AdcChannel::ADC_TEMPERATURE);
+    static const uint16_t TEMP_REF = 25;
+    static const uint16_t ADC_REF = 1750;   ///< v_ref / 3.3 * 4095
+    static const uint16_t AVG_SLOPE = 5;    ///< avg_slope/(3.3/4096)
+    celcius = (ADC_REF - raw) / AVG_SLOPE + TEMP_REF;
+    _battery_info.state_of_charge_pct_stdev = celcius;
 }
 
 void VtolBattery::_update_soc() {

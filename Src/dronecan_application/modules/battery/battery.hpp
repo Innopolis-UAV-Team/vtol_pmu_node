@@ -15,7 +15,10 @@ struct BatteryParameters {
     float full_voltage;
     float empty_voltage;
     float current_offset;
+    uint32_t max_current;
     int8_t pmu_soc_pct;
+    bool enable_thermistor_up;
+    bool enable_thermistor_down;
     bool correct{false};
 };
 
