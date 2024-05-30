@@ -36,6 +36,8 @@ private:
     void _update_remaining();
     void _update_gate_info();
 
+    int var;
+
     BatteryParameters _params;
     uint32_t _last_spin_time_ms{0};
     BatteryInfo_t _battery_info{};

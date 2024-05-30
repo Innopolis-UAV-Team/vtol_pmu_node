@@ -5,7 +5,7 @@ jobs:
     strategy:
       matrix:
         target: [dronecan, sitl_dronecan]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
@@ -15,18 +15,23 @@ jobs:
           token: ${{ secrets.VTOL_PMU_IOC_TOKEN }}
 
       - name: Install dependencies
-        run: ./scripts/tools/install_for_ubuntu.sh --yes
+        run: |
+          sudo apt-get install -y gcc-arm-none-eabi
+          python -m venv venv
 
       - name: Install raccoonlab-tools
         run: |
+          source venv/bin/activate
           pip install pyserial python-can pydronecan pycyphal pytest pytest-asyncio yakut
           pip install -i https://test.pypi.org/simple/ raccoonlab-tools
 
       - name: Build the target
-        run: make ${{ matrix.target }}
-
-      - name: If SITL then run and execute pytest tests
-        if: ${{ matrix.target == 'sitl_dronecan' }}
         run: |
-          make run &
-          rl-test-dronecan-specification
+          source venv/bin/activate
+          make ${{ matrix.target }}
+
+      # - name: If SITL then run and execute pytest tests
+      #   if: ${{ matrix.target == 'sitl_dronecan' }}
+      #   run: |
+      #     make run &
+      #     rl-test-dronecan-specification

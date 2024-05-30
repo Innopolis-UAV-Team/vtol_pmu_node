@@ -76,7 +76,8 @@ target_include_directories(${EXECUTABLE} PRIVATE
     ${ROOT_DIR}/Src/platform/${APP_PLATFORM}
 )
 
-SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wno-volatile")
+SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wno-volatile -Wunused-variable -Winit-self")
+# SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wno-volatile -Wextra -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes -Wstrict-overflow=5 -Wwrite-strings -Waggregate-return -Wcast-qual -Wswitch-default -Wswitch-enum -Wconversion -Wunreachable-code")
 
 execute_process(
     COMMAND ${LIBPARAMS_PATH}/scripts/generate_params.py --out-dir ${BUILD_SRC_DIR} -f ${LIBPARAMS_PARAMS}
@@ -111,6 +112,25 @@ else()
         -specs=nano.specs
         -Wall
         --specs=nosys.specs
+
+        -Wunused-variable
+        -Winit-self
+
+        # -Wextra
+        # -Wfloat-equal
+        # -Wundef
+        # -Wshadow
+        # -Wpointer-arith
+        # -Wcast-align
+        # -Wstrict-prototypes
+        # -Wstrict-overflow=5
+        # -Wwrite-strings
+        # -Waggregate-return
+        # -Wcast-qual
+        # -Wswitch-default
+        # -Wswitch-enum
+        # -Wconversion
+        # -Wunreachable-code
     )
 
     target_link_options(${EXECUTABLE} PRIVATE
