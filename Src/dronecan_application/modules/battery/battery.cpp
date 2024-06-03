@@ -45,6 +45,7 @@ void VtolBattery::_update_params() {
 
     _params.full_voltage = 0.001f * paramsGetIntegerValue(PARAM_BATTERY_FULL_VOLTAGE_MV);
     _params.empty_voltage = 0.001f * paramsGetIntegerValue(PARAM_BATTERY_EMPTY_VOLTAGE_MV);
+    _params.voltage_range = _params.full_voltage - _params.empty_voltage;
     _params.current_offset = 0.001f * paramsGetIntegerValue(PARAM_BATTERY_CURRENT_OFFSET_MA);
     _params.max_current = paramsGetIntegerValue(PARAM_BATTERY_MAX_CURRENT);
 
@@ -61,7 +62,7 @@ void VtolBattery::_update_params() {
 void VtolBattery::_spin_once() {
     _update_voltage_and_current();
     _update_temperature();
-    _update_soc();
+    _battery_info.state_of_charge_pct = _update_soc(_battery_info.voltage, _battery_info.current);
     _update_remaining();
     _update_gate_info();
 
@@ -114,19 +115,20 @@ void VtolBattery::_update_temperature() {
     _battery_info.state_of_charge_pct_stdev = celcius;
 }
 
-void VtolBattery::_update_soc() {
-    uint8_t& soc_pct = _battery_info.state_of_charge_pct;
+uint8_t VtolBattery::_update_soc(float voltage, float current) const {
+    uint8_t soc_pct;
 
     if (_params.pmu_soc_pct >= 0) {
         soc_pct = _params.pmu_soc_pct;
     } else if (!_params.correct) {
         soc_pct = 0;
     } else {
-        float full_voltage = _params.full_voltage;
-        float empty_voltage = _params.empty_voltage;
-        auto voltage_clamped = std::clamp(_battery_info.voltage, empty_voltage, full_voltage);
-        soc_pct = 100.0f * (voltage_clamped - empty_voltage) / (full_voltage - empty_voltage);
+        float v_adjasted = voltage + current * _params.resistance;
+        float v_clamped = std::clamp(v_adjasted, _params.empty_voltage, _params.full_voltage);
+        soc_pct = 100.0f * (v_clamped - _params.empty_voltage) / _params.voltage_range;
     }
+
+    return soc_pct;
 }
 
 void VtolBattery::_update_remaining() {

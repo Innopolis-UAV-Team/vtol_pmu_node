@@ -14,7 +14,9 @@ extern "C" {
 struct BatteryParameters {
     float full_voltage;
     float empty_voltage;
+    float voltage_range;
     float current_offset;
+    float resistance{0.032};
     uint32_t max_current;
     int8_t pmu_soc_pct;
     bool enable_thermistor_up;
@@ -32,7 +34,7 @@ private:
     void _spin_once();
     void _update_voltage_and_current();
     void _update_temperature();
-    void _update_soc();
+    uint8_t _update_soc(float voltage, float current) const;
     void _update_remaining();
     void _update_gate_info();
 
