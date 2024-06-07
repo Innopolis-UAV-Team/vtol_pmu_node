@@ -87,3 +87,12 @@ battery.enable_thermistor_down:
   default: 0
   min: 0
   max: 1
+
+battery.resistance:
+  type: Integer
+  note: Resistor, mOhm. It is used in the current compensation algorithm.
+  enum: PARAM_BATTERY_RESISTOR_MILLI_OHM
+  flags: mutable
+  default: 28
+  min: 24
+  max: 120
