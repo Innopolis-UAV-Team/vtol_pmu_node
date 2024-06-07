@@ -14,7 +14,7 @@ The node has the following registers:
 |  10 | battery.max_current     | Max measurement current |
 |  11 | battery.enable_thermistor_up | Enable thermistor up |
 |  12 | battery.enable_thermistor_down | Enable thermistor down |
-|  13 | battery.resistor_mOhm   | Resistor, mOhm. It is used in the current compensation algorithm. |
+|  13 | battery.resistance      | Resistor, mOhm. It is used in the current compensation algorithm. |
 |  14 | buzzer.error_melody     | Melody that is played during error: </br> - 0 means anoying beep melody (500 ms enabled, 500 disabled),</br>- 1 means tolerable melody (500 ms enabled, 2500 ms disabled) </br>- 2 means bimmer melody </br>- [3, 126] - reserved, no melody </br>- 127 constant sound defined by buzzer.frequency and buzzer.duration. |
 |  15 | buzzer.arm_melody       | Melody that is played when the vehicle is armed. Not implemented at the momement. |
 |  16 | buzzer.frequency        | This parameter is applied only if buzzer.melody=127. It means PWM Frequency, Hz. |
