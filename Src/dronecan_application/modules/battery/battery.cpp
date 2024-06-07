@@ -52,6 +52,8 @@ void VtolBattery::_update_params() {
     _params.enable_thermistor_up = paramsGetIntegerValue(PARAM_BATTERY_ENABLE_THERMISTOR_UP);
     _params.enable_thermistor_down = paramsGetIntegerValue(PARAM_BATTERY_ENABLE_THERMISTOR_DOWN);
 
+    _params.resistance = 0.001 * paramsGetIntegerValue(PARAM_BATTERY_RESISTOR_MILLI_OHM);
+
     _params.pmu_soc_pct = paramsGetIntegerValue(PARAM_BATTERY_SOC_PCT);
 
     _params.correct = _params.full_voltage > _params.empty_voltage;
